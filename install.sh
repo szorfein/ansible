@@ -71,7 +71,8 @@ new_group() {
 add_to_group() {
   "$AUTH" usermod -a -G ssh-user "$NEWUSER"
   if [ "$?" -eq 0 ] ; then
-    msg_ok "User $NEWUSER added."
+    msg_ok "User $NEWUSER added, add a strong password"
+    "$AUTH" passwd "$NEWUSER"
   else
     die "Error Add_to_group"
   fi
@@ -106,14 +107,17 @@ create_client_keys() {
 }
 
 service_for_void() {
-  [ -s /var/service/sshd ] || {
+  if ! [ -L /var/service/sshd ] ; then
     "$AUTH" ln -s /etc/sv/sshd /var/service/sshd
     if [ "$?" -eq 0 ] ; then
       msg_ok "Service started."
     else
-      die "Err service"
+      die "Err start service"
     fi
-  }
+  else
+    "$AUTH" sv restart sshd
+    msg_ok "Service restarted."
+  fi
 }
 
 quote() { echo " ${red}>${white} $1${end}"; }
@@ -189,8 +193,9 @@ void_server() {
 
 void_client() {
   create_client_keys "$USER"
+  service_for_void
   quote "Copy your keys with e.g:"
-  quote "ssh-copy-id localhost"
+  quote "ssh-copy-id -i ~/.ssh/ansible_ed25519.key.pub $NEWUSER@localhost"
   quote "Connect with -> ssh -i ~/.ssh/ansible_ed25519.key $NEWUSER@localhost"
 }
 
