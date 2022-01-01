@@ -1,3 +1,6 @@
 ---
 - name: Anonymize the machine_id
   import_tasks: machine_id.yml
+
+- name: Anonymize hostname
+  import_tasks: hostname.yml
