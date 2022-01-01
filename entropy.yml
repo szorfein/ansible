@@ -1,0 +1,16 @@
+---
+- name: Adding more entropy
+  hosts: hardened
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install {{ entropy_pkg }}
+      package:
+        name: "{{ entropy_pkg }}"
+        state: present
+    - name: Running service {{ entropy_pkg }}
+      service:
+        name: "{{ entropy_pkg }}"
+        state: started
+        enabled: yes
+      when: { ansible_os_family != "Gentoo" }
