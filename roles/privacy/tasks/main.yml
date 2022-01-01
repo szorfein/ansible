@@ -1,0 +1,3 @@
+---
+- name: Anonymize the machine_id
+  import_tasks: machine_id.yml

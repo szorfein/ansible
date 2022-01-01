@@ -4,3 +4,9 @@
   become: true
   roles:
     - hardened
+
+- hosts: privacy
+  gather_facts: false
+  become: true
+  roles:
+    - privacy
