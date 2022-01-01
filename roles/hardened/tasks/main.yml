@@ -1,0 +1,3 @@
+---
+- name: Adding more entropy
+  import_tasks: entropy.yml

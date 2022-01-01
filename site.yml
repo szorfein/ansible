@@ -1,0 +1,6 @@
+---
+- hosts: hardened
+  gather_facts: false
+  become: true
+  roles:
+    - hardened
