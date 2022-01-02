@@ -1,4 +1,3 @@
-AllowTcpForwarding no
 ClientAliveCountMax 2
 Compression no
 LogLevel VERBOSE
@@ -11,13 +10,8 @@ HostKey /etc/ssh/ssh_host_rsa_key
 #HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-PubkeyAuthentication yes
-
 # ssh -Q KexAlgorithms
 KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
-
-# To disable tunneled clear text passwords, change to no here!
-PasswordAuthentication no
 
 # Change to no to disable s/key passwords
 ChallengeResponseAuthentication no

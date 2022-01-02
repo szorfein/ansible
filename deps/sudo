@@ -1,1 +1,1 @@
-veil ALL=(ALL) ALL
+veil ALL=(root) NOPASSWD: ALL

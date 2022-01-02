@@ -1,0 +1,20 @@
+---
+- name: permission on /boot
+  file:
+    path: /boot
+    state: directory
+    mode: 0700
+
+- name: permission on /usr/src
+  file:
+    path: /usr/src
+    state: directory
+    mode: 0700
+
+- name: permission on /usr/lib/modules
+  file:
+    path: /usr/lib/modules
+    state: directory
+    mode: 0700
+  when:
+    - ansible_facts['os_family'] == "void" and ansible_facts['architecture'] == "x86_64"
