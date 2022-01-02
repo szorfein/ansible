@@ -4,3 +4,6 @@
 
 - name: Fixing permissions
   import_tasks: permission.yml
+
+- name: Hidepid
+  import_tasks: hidepid.yml
