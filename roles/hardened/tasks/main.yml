@@ -1,3 +1,6 @@
 ---
 - name: Adding more entropy
   import_tasks: entropy.yml
+
+- name: Fixing permissions
+  import_tasks: permission.yml
