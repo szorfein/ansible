@@ -6,18 +6,22 @@
     $ ./install-minimal.sh
     $ ansible localhost -i hosts-start --ask-pass -m ping
 
-If the last command return `pong`, the next add passwordless for Ansible.
+If the last command return `pong`, the next add password-less for Ansible.
 
-    $ ansible-playbook -i hosts-start -e user_name=ansible playbook/secure-shell.yml
+    $ ansible-playbook -i hosts-start -e user_name=ansible -e password="$(pass ansible/password)" -e authorized_key=~/.ssh/ansible.pub -Kk playbooks/ansible-account.yml
 
-## Configuration
+If you use `pass`, you can generate secrets like this:
 
-#### Ssh_config
+    $ pass generate --no-symbols ansible/password 80
+
+### Configure ssh_config
 After the `install.sh`
 
     $ vim ~/.ssh/config
     Host <hostname>
-      IdentityFile ~/.ssh/ansible_ed25519.key
+      IdentityFile ~/.ssh/ansible.pub
+
+All Ansible operations after it require `-b, --become` and `--user ansible`.
 
 #### Inventory
 

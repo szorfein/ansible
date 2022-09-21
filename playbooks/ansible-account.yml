@@ -1,0 +1,25 @@
+---
+- name: Manage User Account
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Create Ansible Account
+      user:
+        name: "{{ user_name }}"
+        shell: /bin/bash
+        password: "{{ password | password_hash('sha512') }}"
+        update_password: on_create
+        groups: wheel
+        comment: Dedicaced Ansible DevOps Account
+        state: present
+    - name: Install Local User Key
+      authorized_key:
+        user: "{{ user_name }}"
+        state: present
+        manage_dir: true
+        key: "{{ lookup('file', authorized_key) }}"
+    - name: Password-less access for {{ user_name }} account
+      copy:
+        src: ansible
+        dest: /etc/sudoers.d/ansible
