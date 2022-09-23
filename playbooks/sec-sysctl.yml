@@ -1,0 +1,7 @@
+---
+- name: Enhance sysctl security
+  hosts: all
+  become: true
+  roles:
+    - sysctl
+
