@@ -10,7 +10,7 @@
       paths:
         - 'vars'
 
-- name: Enforcing kernel rules for sysctl > {{ kernel_conf }}
+- name: Enforcing kernel rules > {{ kernel_conf }}
   ansible.posix.sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
@@ -23,8 +23,9 @@
     - { name: 'kernel.kexec_load_disabled', value: '1' }
     - { name: 'kernel.sysrq', value: '4' }
     - { name: 'kernel.unprivileged_userns_clone', value: '0' }
+  when: enforce_kernel_rules | bool
 
-- name: Enforcing network rules for sysctl > {{ network_conf }}
+- name: Enforcing network rules > {{ network_conf }}
   ansible.posix.sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
@@ -53,3 +54,20 @@
     - { name: 'net.ipv4.tcp_sack', value: '0' }
     - { name: 'net.ipv4.tcp_dsack', value: '0' }
     - { name: 'net.ipv4.tcp_fack', value: '0' }
+  when: enforce_network_rules | bool
+
+- name: Enforcing userspace rules > {{ userspace_conf }}
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_file: "{{ userspace_conf }}"
+  with_items:
+    - { name: 'kernel.yama.ptrace_scope', value: '2' }
+    - { name: 'vm.mmap_rnd_bits', value: '32' }
+    - { name: 'vm.mmap_rnd_compat_bits', value: '16' }
+    - { name: 'fs.protected_symlinks', value: '1' }
+    - { name: 'fs.protected_hardlinks', value: '1' }
+    - { name: 'fs.protected_fifos', value: '2' }
+    - { name: 'fs.protected_regular', value: '2' }
+  when: enforce_userspace_rules | bool

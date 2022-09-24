@@ -1,5 +1,5 @@
 ---
-- name: Enhance sysctl security
+- name: Enhance Global Security
   hosts: all
   become: true
   roles:
