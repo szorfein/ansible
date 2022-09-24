@@ -1,2 +1,4 @@
 ---
 # vars file for sysctl
+kernel_conf: '/etc/sysctl.conf'
+network_conf: '/etc/sysctl.conf'

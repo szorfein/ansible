@@ -1,0 +1,3 @@
+---
+kernel_conf: '/etc/sysctl.d/kernel.conf'
+network_conf: '/etc/sysctl.d/network.conf'
