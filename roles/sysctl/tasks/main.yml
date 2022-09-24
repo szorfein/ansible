@@ -1,6 +1,0 @@
----
-# tasks file for sysctl
-- ansible.posix.sysctl:
-  name: kernel.kptr_restrict
-  value: '2'
-  state: present

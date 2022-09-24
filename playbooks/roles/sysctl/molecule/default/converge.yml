@@ -3,6 +3,6 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: "Include acme.sysctl"
+    - name: "Include szorfein.sysctl"
       ansible.builtin.include_role:
-        name: "acme.sysctl"
+        name: "szorfein.sysctl"
