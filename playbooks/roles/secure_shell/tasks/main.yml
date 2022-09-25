@@ -1,0 +1,12 @@
+---
+# tasks file for secure_shell
+- name: Creating ssh_group
+  ansible.builtin.group:
+    name: ssh_user
+    state: present
+
+- name: Enable service {{ service_name }}
+  ansible.builtin.service:
+    name: "{{ service_name }}"
+    enabled: yes
+

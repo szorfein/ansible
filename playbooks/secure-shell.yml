@@ -1,0 +1,6 @@
+---
+- name: Security of SSH
+  hosts: all
+  become: true
+  roles:
+    - secure_shell

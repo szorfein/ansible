@@ -1,0 +1,3 @@
+---
+# vars file for secure_shell
+service_name: sshd
