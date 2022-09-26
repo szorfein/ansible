@@ -1,7 +1,11 @@
-Role Name
+secure_shell
 =========
 
-A brief description of the role goes here.
+Enhance Security of SSH.
+
+Helped with:
+- Lynis
+- https://stribika.github.io/2015/01/04/secure-secure-shell.html
 
 Requirements
 ------------

@@ -1,2 +1,4 @@
 ---
 # defaults file for secure_shell
+ssh_group_name: ssh-user
+allowed_users: []
