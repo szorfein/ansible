@@ -3,6 +3,7 @@
   hosts: all
   become: true
   vars:
-    allowed_users: ["{{ lookup('env', 'USER') }}"]
+    allowed_users: [ansible]
+    # allowed_users: ["{{ lookup('env', 'USER') }}"]
   roles:
     - secure_shell

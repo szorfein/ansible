@@ -18,9 +18,9 @@
     name: "{{ service_name }}"
     enabled: yes
 
-- name: Update SSHD config
+- name: Update SSHD config > {{ sshd_config_file }}
   ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
+    path: "{{ sshd_config_file }}"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
@@ -61,3 +61,11 @@
       line: "AllowAgentForwarding no"
     - regexp: "^AllowGroups"
       line: "AllowGroups {{ ssh_group_name }}"
+    - regexp: "^KexAlgorithms"
+      line: "KexAlgorithms {{ kex_algorithms }}"
+    - regexp: "^Ciphers"
+      line: "Ciphers {{ ciphers }}"
+    - regexp: "^MACs"
+      line: "MACs {{ macs }}"
+    - regexp: "^HostKeyAlgorithms"
+      line: "HostKeyAlgorithms {{ host_key_algorithms }}"
