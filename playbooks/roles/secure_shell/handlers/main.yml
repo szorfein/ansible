@@ -1,6 +1,6 @@
 ---
 # handlers file for secure_shell
-- name: Reloading service
+- name: restart ssh
   ansible.builtin.service:
     name: "{{ service_name }}"
-    state: reloaded
+    state: restarted

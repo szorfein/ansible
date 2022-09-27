@@ -5,7 +5,7 @@
     name: "{{ ssh_group_name }}"
     state: present
 
-- name: Allow user {{ allowed_users }} to use SSH
+- name: Allowing {{ allowed_users }} to use SSH
   ansible.builtin.user:
     name: "{{ item }}"
     groups: "{{ ssh_group_name }}"
@@ -69,3 +69,12 @@
       line: "MACs {{ macs }}"
     - regexp: "^HostKeyAlgorithms"
       line: "HostKeyAlgorithms {{ host_key_algorithms }}"
+  notify: restart ssh
+
+- name: Configuring SSH > {{ ssh_config_file }}
+  template:
+    src: ssh_config.j2
+    dest: "{{ ssh_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
