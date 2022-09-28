@@ -21,8 +21,8 @@
     - { name: 'kernel.printk', value: '3 3 3 3' }
     - { name: 'kernel.unprivileged_bpf_disabled', value: '1' }
     - { name: 'kernel.kexec_load_disabled', value: '1' }
-    - { name: 'kernel.sysrq', value: '4' }
     - { name: 'kernel.unprivileged_userns_clone', value: '0' }
+    - { name: 'kernel.kexec_load_disabled', value: '1' }
   when: enforce_kernel_rules | bool
 
 - name: Enforcing network rules > {{ network_conf }}
@@ -54,6 +54,9 @@
     - { name: 'net.ipv4.tcp_sack', value: '0' }
     - { name: 'net.ipv4.tcp_dsack', value: '0' }
     - { name: 'net.ipv4.tcp_fack', value: '0' }
+    - { name: 'net.core.bpf_jit_harden', value: '2' }
+    - { name: 'net.ipv4.conf.all.log_martians', value: '1' }
+    - { name: 'net.ipv4.conf.default.log_martians', value: '1' }
   when: enforce_network_rules | bool
 
 - name: Enforcing userspace rules > {{ userspace_conf }}
@@ -70,4 +73,5 @@
     - { name: 'fs.protected_hardlinks', value: '1' }
     - { name: 'fs.protected_fifos', value: '2' }
     - { name: 'fs.protected_regular', value: '2' }
+    - { name: 'fs.suid_dumpable', value: '0' }
   when: enforce_userspace_rules | bool
