@@ -3,6 +3,7 @@
   become: true
   roles:
     - hardened
+    - sysctl
 
 - hosts: privacy
   gather_facts: false
