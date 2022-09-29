@@ -9,6 +9,14 @@ After the `install.sh`
     Host <hostname>
       IdentityFile ~/.ssh/ansible_ed25519.key
 
+### Ansible.cfg
+vim ansible.cfg
+
+```cfg
+[defaults]
+remote_user=ansible
+```
+
 #### Inventory
 
     $ cp hosts_example hosts
