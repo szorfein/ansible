@@ -1,9 +1,18 @@
 # ansible
 
 ## Install
-`install-minimal.sh` will check dependencies for Ansible and start services.
+`install.sh` will check dependencies for Ansible and start services.
 
-    $ ./install-minimal.sh
+On a server:
+
+    $ ./install.sh --server --password
+
+For you:
+
+    $ ./install.sh --client
+
+Test the connection:
+
     $ ansible localhost -i hosts-start --ask-pass -m ping
 
 If the last command return `pong`, the next add password-less for Ansible.
