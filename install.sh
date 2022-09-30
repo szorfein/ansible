@@ -25,8 +25,13 @@ msg_ok() { printf "\t${green}[${white} ok ${green}]${white}${end}"\\n; }
 die() { echo "${red}[${white}-${red}]${white} $1 ${end}"; exit 1; }
 
 create_client_keys() {
+  if ! "$CLIENT" ; then return ; fi
+
+  msg_info "Checking ssh key"
   [ -f "$HOME"/.ssh/ansible.pub ] \
     || ssh-keygen -t ed25519 -o -a 100 -f "$HOME"/.ssh/ansible
+
+  msg_ok
 }
 
 service_for_void() {
@@ -42,8 +47,6 @@ service_for_void() {
     msg_ok
   fi
 }
-
-ok() { printf "\t[Ok]\n"; }
 
 systemd_service() {
   msg_info "Checking service sshd"
@@ -71,8 +74,8 @@ options() {
     case "$1" in
       -s | --server) SERVER=true ; shift ;;
       -c | --client) CLIENT=true ; shift ;;
-      -h | --help) show_options ;;
       -p | --password) PASSWD=true ; shift ;;
+      -h | --help) show_options ;;
       *) die "Invalid argument: $1" ;;
     esac
   done
@@ -86,19 +89,6 @@ configure_sudo() {
   "$AUTH" chmod 600 /etc/sudoers.d/"$USER"
 }
 
-void_server() {
-  configure_sudo
-  title "Service..."
-  service_for_void
-  msg_ok
-}
-
-void_client() {
-  create_client_keys
-  quote "Copy your keys with e.g:"
-  quote "ssh-copy-id -i ~/.ssh/ansible.pub $USER@localhost"
-  quote "Connect with -> ssh -i ~/.ssh/ansible.key $USER@localhost"
-}
 
 dep() {
   if ! hash "$2" 2>/dev/null ; then
@@ -123,71 +113,70 @@ show_access() {
 
 msg_info() { printf "${blue}>>${white} $1...${end}" ; }
 
+install_deps() {
+  msg_info "Checking dependencies"
+  printf "\n"
+  [ "$SERVER" ] && "$AUTH" $INSTALL $1
+  [ "$CLIENT" ] && "$AUTH" $INSTALL $2
+}
+
+server_setup() {
+  configure_sudo
+  if "$PASSWD" ; then passwd "$USER" ; fi
+  show_access
+}
+
 main() {
   if_no_args "$@"
   options "$@"
 
   if [ -f /etc/os-release ] ; then
     if grep -q void /etc/os-release ; then
-      INSTALL="xbps-install -S"
+      "$AUTH" xbps-install -S
+      INSTALL="xbps-install"
 
-      title "Installing..."
-      dep "$AUTH" "$AUTH"
-      dep openssh ssh
-      if "$CLIENT" ; then
-        dep ansible ansible
-        dep sshpass sshpass
-      fi
+      install_deps "$AUTH ssh" \
+                   "ansible sshpass"
 
-      title "Configuring..."
       if "$SERVER" ; then
-        void_server
-        show_access
+        service_for_void
+        server_setup
       fi
 
-      if "$CLIENT" ; then void_client ; fi
-      msg_ok
+      create_client_keys
 
     elif grep -iq "^name=\"arch linux\"" /etc/os-release ; then
       "$AUTH" pacman -Sy # update datababse
       INSTALL="pacman -S --needed"
 
-      msg_info "Checking dependencies"
-      printf "\n"
-      "$AUTH" $INSTALL openssh "$AUTH"
+      install_deps "$AUTH openssh" \
+                   "ansible sshpass"
 
       if "$SERVER"; then
         systemd_service
-        configure_sudo
-        show_access
-        if "$PASSWD" ; then passwd "$USER" ; fi
+        server_setup
       fi
 
-      if "$CLIENT" ; then
-        "$AUTH" "$INSTALL" ansible sshpass
-        create_client_keys
-      fi
+      create_client_keys
     
     elif grep -iq "^name=\"ubuntu\"" /etc/os-release ; then
       "$AUTH" apt-get update
       INSTALL="apt-get install"
 
-      "$AUTH" $INSTALL "$AUTH"
+      install_deps "$AUTH openssh-server" \
+                   "software-properties-common"
 
       if "$SERVER" ; then
-        "$AUTH" $INSTALL openssh-server
         systemd_service
-        configure_sudo
-        show_access
-        if "$PASSWD" ; then passwd "$USER" ; fi
+        server_setup
       fi
 
       if "$CLIENT" ; then
-        "$AUTH" $INSTALL software-properties-common
         "$AUTH" apt-add-repository ppa:ansible/ansible
         "$AUTH" $INSTALL ansible
-        create_client_keys
       fi
+
+      create_client_keys
     else
       die "Os-release, Your system is not yet supported :("
     fi
@@ -195,7 +184,7 @@ main() {
     die "Your system is not yet supported :("
   fi
 
-  exit 0
+  exit
 }
 
 main "$@"
