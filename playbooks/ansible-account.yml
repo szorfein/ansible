@@ -10,7 +10,6 @@
         shell: /bin/bash
         password: "{{ password | password_hash('sha512') }}"
         update_password: on_create
-        groups: wheel
         comment: Dedicaced Ansible DevOps Account
         state: present
     - name: Install Local User Key
@@ -18,6 +17,7 @@
         user: "{{ user_name }}"
         state: present
         manage_dir: true
+        exclusive: true
         key: "{{ lookup('file', authorized_key) }}"
     - name: Password-less access for {{ user_name }} account
       copy:

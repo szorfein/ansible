@@ -167,6 +167,27 @@ main() {
         "$AUTH" "$INSTALL" ansible sshpass
         create_client_keys
       fi
+    
+    elif grep -iq "^name=\"ubuntu\"" /etc/os-release ; then
+      "$AUTH" apt-get update
+      INSTALL="apt-get install"
+
+      "$AUTH" $INSTALL "$AUTH"
+
+      if "$SERVER" ; then
+        "$AUTH" $INSTALL openssh-server
+        systemd_service
+        configure_sudo
+        show_access
+        if "$PASSWD" ; then passwd "$USER" ; fi
+      fi
+
+      if "$CLIENT" ; then
+        "$AUTH" $INSTALL software-properties-common
+        "$AUTH" apt-add-repository ppa:ansible/ansible
+        "$AUTH" $INSTALL ansible
+        create_client_keys
+      fi
     else
       die "Os-release, Your system is not yet supported :("
     fi
