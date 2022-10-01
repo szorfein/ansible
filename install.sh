@@ -121,6 +121,8 @@ install_deps() {
 }
 
 server_setup() {
+  if ! "$SERVER" ; then return ; fi
+
   configure_sudo
   if "$PASSWD" ; then passwd "$USER" ; fi
   show_access
@@ -138,12 +140,7 @@ main() {
       install_deps "$AUTH ssh" \
                    "ansible sshpass"
 
-      if "$SERVER" ; then
-        service_for_void
-        server_setup
-      fi
-
-      create_client_keys
+      if "$SERVER" ; then service_for_void ; fi
 
     elif grep -iq "^name=\"arch linux\"" /etc/os-release ; then
       "$AUTH" pacman -Sy # update datababse
@@ -152,13 +149,8 @@ main() {
       install_deps "$AUTH openssh" \
                    "ansible sshpass"
 
-      if "$SERVER"; then
-        systemd_service
-        server_setup
-      fi
+      if "$SERVER"; then systemd_service ; fi
 
-      create_client_keys
-    
     elif grep -iq "^name=\"ubuntu\"" /etc/os-release ; then
       "$AUTH" apt-get update
       INSTALL="apt-get install"
@@ -166,23 +158,30 @@ main() {
       install_deps "$AUTH openssh-server" \
                    "software-properties-common"
 
-      if "$SERVER" ; then
-        systemd_service
-        server_setup
-      fi
+      if "$SERVER" ; then systemd_service ; fi
 
       if "$CLIENT" ; then
         "$AUTH" apt-add-repository ppa:ansible/ansible
         "$AUTH" $INSTALL ansible
       fi
 
-      create_client_keys
+    elif grep -iq "^name=\"debian gnu\/linux\"" /etc/os-release ; then
+      "$AUTH" apt-get update
+      INSTALL="apt-get install"
+
+      install_deps "$AUTH openssh-server" \
+                   "sshpass ansible"
+
+      if "$SERVER" ; then systemd_service ; fi
     else
       die "Os-release, Your system is not yet supported :("
     fi
   else
     die "Your system is not yet supported :("
   fi
+
+  server_setup
+  create_client_keys
 
   exit
 }
