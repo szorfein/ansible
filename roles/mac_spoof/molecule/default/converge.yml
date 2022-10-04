@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Include szorfein.mac_spoof"
+      ansible.builtin.include_role:
+        name: "szorfein.mac_spoof"
