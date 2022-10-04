@@ -1,2 +1,24 @@
 ---
 # tasks file for mac_spoof
+- name: Installing macchanger
+  ansible.builtin.package:
+    name: macchanger
+    state: present
+
+- name: Checking if iwd is installed
+  ansible.builtin.stat:
+    path: /etc/iwd
+  register: p
+
+- name: Configuring iwd
+  template:
+    src: iwd.conf.j2
+    dest: /etc/iwd/main.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: p.stat.exists
+
+- name: Say hello
+  ansible.builtin.debug:
+    msg: "say heelo"
