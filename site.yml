@@ -6,7 +6,6 @@
     - sysctl
 
 - hosts: privacy
-  gather_facts: false
   become: true
   roles:
     - privacy

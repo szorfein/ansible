@@ -1,2 +1,11 @@
 ---
 # handlers file for mac_spoof
+- name: restart iwd
+  ansible.builtin.service:
+    name: "{{ iwd_service_name }}"
+    state: restarted
+
+- name: restart udev
+  ansible.builtin.service:
+    name: "{{ udev_service_name }}"
+    state: restarted
