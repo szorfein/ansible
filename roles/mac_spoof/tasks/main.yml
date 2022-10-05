@@ -1,5 +1,5 @@
 ---
-# tasks file for mac_spoof
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html
 - name: Load variable file for {{ ansible_os_family }}
   ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
   vars:
@@ -29,6 +29,17 @@
   notify:
     - restart iwd
   when: p.stat.isdir is defined and p.stat.isdir
+
+- ansible.builtin.stat:
+    path: /etc/wpa_supplicant
+  register: p
+
+- name: wpa_supplicant
+  include_tasks: wpa_supplicant.yml
+  when: p.stat.isdir is defined and p.stat.isdir and interface.startswith("wl")
+  loop: '{{ ansible_facts.interfaces }}'
+  loop_control:
+    loop_var: interface # rename loop default name 'item' by 'interface'
 
 - ansible.builtin.stat:
     path: /etc/udev/rules.d

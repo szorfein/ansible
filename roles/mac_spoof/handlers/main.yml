@@ -9,3 +9,8 @@
   ansible.builtin.service:
     name: "{{ udev_service_name }}"
     state: restarted
+
+- name: restart wpa_supplicant
+  ansible.builtin.service:
+    name: "{{ wpa_supplicant_service_name }}"
+    state: restarted
