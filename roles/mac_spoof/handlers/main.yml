@@ -1,5 +1,11 @@
 ---
 # handlers file for mac_spoof
+- name: enable iwd
+  ansible.builtin.service:
+    name: "{{ iwd_service_name }}"
+    state: started
+    enabled: yes
+
 - name: restart iwd
   ansible.builtin.service:
     name: "{{ iwd_service_name }}"
@@ -9,6 +15,12 @@
   ansible.builtin.service:
     name: "{{ udev_service_name }}"
     state: restarted
+
+- name: enable wpa_supplicant
+  ansible.builtin.service:
+    name: "{{ wpa_supplicant_service_name }}"
+    state: restarted
+    enabled: yes
 
 - name: restart wpa_supplicant
   ansible.builtin.service:

@@ -15,9 +15,13 @@
     name: macchanger
     state: present
 
-- ansible.builtin.stat:
-    path: /etc/iwd
-  register: p
+- name: Installing iwd
+  ansible.builtin.package:
+    name: iwd
+    state: present
+  notify:
+    - enable iwd
+  when: wifi_client is defined and wifi_client == 'iwd'
 
 - name: Configuring iwd
   ansible.builtin.template:
@@ -28,15 +32,19 @@
     mode: '0644'
   notify:
     - restart iwd
-  when: p.stat.isdir is defined and p.stat.isdir
+  when: wifi_client is defined and wifi_client == 'iwd'
 
-- ansible.builtin.stat:
-    path: /etc/wpa_supplicant
-  register: p
+- name: Installing wpa_supplicant
+  ansible.builtin.package:
+    name: wpa_supplicant
+    state: present
+  notify:
+    - enable wpa_supplicant
+  when: wifi_client is defined and wifi_client == 'wpa_supplicant'
 
 - name: wpa_supplicant
   include_tasks: wpa_supplicant.yml
-  when: p.stat.isdir is defined and p.stat.isdir and interface.startswith("wl")
+  when: wifi_client == 'wpa_supplicant' and interface.startswith("wl")
   loop: '{{ ansible_facts.interfaces }}'
   loop_control:
     loop_var: interface # rename loop default name 'item' by 'interface'
@@ -55,3 +63,12 @@
   notify:
     - restart udev
   when: p.stat.isdir is defined and p.stat.isdir
+
+- name: Uninstall wifi clients
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - iwd
+    - wpa_supplicant
+  when: wifi_client is undefined

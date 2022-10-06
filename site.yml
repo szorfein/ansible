@@ -9,4 +9,4 @@
   become: true
   roles:
     - privacy
-    - mac_spoof
+    - { role: mac_spoof, wifi_client: iwd }
