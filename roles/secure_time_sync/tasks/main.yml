@@ -25,3 +25,24 @@
     - Disable NTP services
     - Enable Sts
   when: ansible_service_mgr == 'systemd'
+
+- name: Config Tor
+  ansible.builtin.lineinfile:
+    path: /etc/tor/torrc
+    regexp: '^SOCKSPort 9050'
+    line: 'SOCKSPort 9050'
+    state: present
+    validate: 'tor --verify-config -f %s'
+  notify:
+    - Restart Tor
+
+- name: Service with Tor
+  ansible.builtin.template:
+    src: systemd-with-tor.service.j2
+    dest: /usr/lib/systemd/system/secure-time-sync-with-tor.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Enable Sts with Tor
+  when: ansible_service_mgr == 'systemd'

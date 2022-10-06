@@ -1,0 +1,29 @@
+[Unit]
+Description=Network Time Synchronization with Tor
+ConditionCapability=CAP_SYS_TIME
+Requires=tor.service
+After=tor.service
+Conflicts=shutdown.target
+Wants=time-set.target
+
+[Service]
+AmbientCapabilities=CAP_SYS_TIME
+CapabilityBoundingSet=CAP_SYS_TIME
+ExecStart=!!/usr/local/bin/secure-time-sync --with-tor
+ProtectProc=invisible
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectSystem=strict
+RestrictNamespaces=yes
+RestrictRealtime=yes
+Restart=always
+RestartSec=6
+Type=notify
+WatchdogSec=6min
+
+[Install]
+WantedBy=multi-user.target

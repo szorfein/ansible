@@ -13,3 +13,14 @@
     name: secure-time-sync
     state: started
     enabled: true
+
+- name: Restart Tor
+  ansible.builtin.service:
+    name: tor
+    state: restarted
+
+- name: Enable Sts with Tor
+  ansible.builtin.service:
+    name: secure-time-sync-with-tor
+    state: started
+    enabled: true
