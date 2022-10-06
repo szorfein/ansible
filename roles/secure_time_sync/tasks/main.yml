@@ -1,0 +1,10 @@
+---
+# tasks file for secure_time_sync
+- name: Get secure-time-sync
+  ansible.builtin.get_url:
+    dest: /usr/local/bin/secure-time-sync
+    url: https://raw.githubusercontent.com/szorfein/secure-time-sync/main/secure-time-sync.sh
+    checksum: sha256:9dde9b9cba77930d66d1a82651c377b5b7ea2bbc40f02e3490e575bac3dc5a96
+    mode: '0755'
+
+    # when: {{ ansible_service_mgr }} == 'systemd'
