@@ -1,2 +1,15 @@
 ---
 # handlers file for secure_time_sync
+- name: Disable NTP services
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  with_items:
+    - systemd-timesyncd
+
+- name: Enable Sts
+  ansible.builtin.service:
+    name: secure-time-sync
+    state: started
+    enabled: true

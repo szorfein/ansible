@@ -7,4 +7,21 @@
     checksum: sha256:9dde9b9cba77930d66d1a82651c377b5b7ea2bbc40f02e3490e575bac3dc5a96
     mode: '0755'
 
-    # when: {{ ansible_service_mgr }} == 'systemd'
+- name: Dependencies
+  ansible.builtin.package:
+    name:
+      - curl
+      - tor
+    state: present
+
+- name: Adding systemd service
+  ansible.builtin.template:
+    src: systemd.service.j2
+    dest: /usr/lib/systemd/system/secure-time-sync.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Disable NTP services
+    - Enable Sts
+  when: ansible_service_mgr == 'systemd'

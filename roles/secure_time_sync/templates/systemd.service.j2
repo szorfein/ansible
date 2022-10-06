@@ -1,0 +1,16 @@
+[Unit]
+Description=Network Time Synchronization
+After=system-sysusers.service
+Before=time-set.target sysinit.target shutdown.target
+Conflicts=shutdown.target
+Wants=time-set.target
+
+[Service]
+Type=oneshot
+ExecStart=!!/usr/local/bin/secure-time-sync
+ProtectHome=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+
+[Install]
+WantedBy=sysinit.target
