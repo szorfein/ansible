@@ -1,0 +1,22 @@
+---
+- name: slab_nomerge
+  ansible.builtin.lineinfile:
+    path: '{{ kernel_hardening_path }}'
+    regexp: '^GRUB_CMDLINE*slab_nomerge"$'
+    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX slab_nomerge"'
+    state: present
+  notify:
+    - Reload grub-mkconfig
+  when: ansible_cmdline.slab_nomerge is not defined or
+        ansible_cmdline.slab_nomerge != true
+
+- name: init_on_alloc=1 init_on_free=1
+  ansible.builtin.lineinfile:
+    path: '{{ kernel_hardening_path }}'
+    regexp: '^GRUB_CMDLINE*init_on_free"$'
+    line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX init_on_alloc=1 init_on_free=1"'
+    state: present
+  notify:
+    - Reload grub-mkconfig
+  when: ansible_cmdline.init_on_free is not defined or
+        ansible_cmdline.init_on_free != '1'
