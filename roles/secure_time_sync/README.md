@@ -1,12 +1,14 @@
-Role Name
+secure_time_sync
 =========
 
-A brief description of the role goes here.
+This role add the last version of the script [secure_time_sync](https://github.com/szorfein/secure-time-sync), disable all services related to the insecure NTP and activate time sync over Tor by using onion address.
+
+[Time Sync](https://madaidans-insecurities.github.io/guides/linux-hardening.html#time-synchronisation)
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
@@ -21,16 +23,14 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: laptops
       roles:
-         - { role: username.rolename, x: 42 }
+         - szorfein.secure_time_sync
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------

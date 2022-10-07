@@ -1,16 +1,24 @@
 [Unit]
 Description=Network Time Synchronization
-After=system-sysusers.service
-Before=time-set.target sysinit.target shutdown.target
+ConditionCapability=CAP_SYS_TIME
 Conflicts=shutdown.target
-Wants=time-set.target
+After=network-online.target nss-lookup.target
+Wants=network-online.target time-set.target
+Before=tor.service
 
 [Service]
 Type=oneshot
+AmbientCapabilities=CAP_SYS_TIME
+CapabilityBoundingSet=CAP_SYS_TIME
 ExecStart=!!/usr/local/bin/secure-time-sync
+ProtectProc=invisible
+ProtectControlGroups=yes
 ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes
+ProtectSystem=strict
 
 [Install]
-WantedBy=sysinit.target
+WantedBy=network-online.target

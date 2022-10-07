@@ -1,15 +1,15 @@
 [Unit]
 Description=Network Time Synchronization with Tor
 ConditionCapability=CAP_SYS_TIME
+Conflicts=shutdown.target
 Requires=tor.service
 After=tor.service
-Conflicts=shutdown.target
-Wants=time-set.target
+Wants=tor.service
 
 [Service]
 AmbientCapabilities=CAP_SYS_TIME
 CapabilityBoundingSet=CAP_SYS_TIME
-ExecStart=!!/usr/local/bin/secure-time-sync --with-tor
+ExecStart=!!/usr/local/bin/secure-time-sync --use-tor
 ProtectProc=invisible
 ProtectControlGroups=yes
 ProtectHome=yes
