@@ -1,2 +1,3 @@
 ---
 # defaults file for cmdline
+mount_boot: false

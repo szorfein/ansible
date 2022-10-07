@@ -1,5 +1,9 @@
 ---
 # tasks file for cmdline
+- name: mount /boot
+  ansible.builtin.shell: mount /boot
+  when: mount_boot
+
 - ansible.builtin.shell: hash grub-install
   register: grub_install
   ignore_errors: true

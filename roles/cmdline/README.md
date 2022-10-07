@@ -1,17 +1,25 @@
-Role Name
-=========
+cmdline
+=======
 
-A brief description of the role goes here.
+Increase security of the kernel command line options by checking {{ ansible.cmdline }} and configure Grub (for now) with lacked options.
+
+- [kicksecure](https://github.com/Kicksecure/security-misc)
+- [maidaidans](https://madaidans-insecurities.github.io/guides/linux-hardening.html#boot-kernel)
+- [kspp](https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project/Recommended_Settings#kernel_command_line_options)
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+If need to mount a `/boot` partition before (default false):
+
+```yml
+mount_boot: true
+```
 
 Dependencies
 ------------
@@ -25,7 +33,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: harden.cmdline, mount_boot: true }
 
 License
 -------
