@@ -1,3 +1,7 @@
 ---
 # vars file for cmdline
-kernel_hardening_path: '/etc/default/grub'
+kernel_hardening_path: /etc/default/grub
+grub_quiet_path: /etc/default/grub
+
+intel_microcode_package: intel-ucode
+amd_microcode_package: amd-ucode

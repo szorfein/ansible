@@ -4,6 +4,18 @@
   ansible.builtin.shell: mount /boot
   when: mount_boot
 
+- name: last Intel microcode
+  ansible.builtin.package:
+    name: '{{ intel_microcode_package }}'
+    state: present
+  when: ansible_processor[1] == 'GenuineIntel'
+
+- name: last Amd microcode
+  ansible.builtin.package:
+    name: '{{ amd_microcode_package }}'
+    state: present
+  when: ansible_processor[1] != 'GenuineIntel'
+
 - ansible.builtin.shell: hash grub-install
   register: grub_install
   ignore_errors: true

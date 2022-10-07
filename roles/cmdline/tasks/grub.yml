@@ -87,3 +87,17 @@
     - Reload grub-mkconfig
   when: ansible_cmdline.oops is not defined or
         ansible_cmdline.oops != 'panic'
+
+# LogLevel 0
+- name: loglevel=0 quiet
+  ansible.builtin.lineinfile:
+    path: '{{ grub_quiet_path }}'
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"$'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=0 quiet"'
+    state: present
+  notify:
+    - Reload grub-mkconfig
+  when: ansible_cmdline.loglevel is not defined or
+        ansible_cmdline.loglevel != '0' or
+        ansible_cmdline.quiet is not defined or
+        ansible_cmdline.quiet != 'true'
