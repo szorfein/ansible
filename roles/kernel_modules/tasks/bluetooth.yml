@@ -1,0 +1,19 @@
+---
+- name: Unload bluetooth
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - hci_uart
+    - btusb
+    - bluetooth
+
+- name: remove Bluetooth
+  ansible.builtin.lineinfile:
+    path: '{{ blacklist_path }}'
+    regexp: '^install {{ item }}'
+    line: 'install {{ item }} /bin/false'
+    state: present
+  with_items:
+    - bluetooth
+    - btusb

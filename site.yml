@@ -10,3 +10,8 @@
   become: true
   roles:
     - privacy
+
+- hosts: test
+  become: true
+  roles:
+    - kernel_modules

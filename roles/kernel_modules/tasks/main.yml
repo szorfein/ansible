@@ -1,0 +1,41 @@
+---
+# tasks file for kernel_modules
+- name: unload
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - dccp
+    - sctp
+    - rds
+    - tipc
+    - pcspkr
+
+- name: uninstall > {{ blacklist_path }}
+  ansible.builtin.lineinfile:
+    path: '{{ blacklist_path }}'
+    regexp: '^install {{ item }}'
+    line: 'install {{ item }} /bin/false'
+    state: present
+    create: yes
+    mode: '0644'
+  with_items:
+    - dccp
+    - sctp
+    - rds
+    - tipc
+
+# https://git.launchpad.net/ubuntu/+source/kmod/tree/debian/modprobe.d/blacklist.conf?h=ubuntu/disco
+# https://git.launchpad.net/ubuntu/+source/kmod/tree/debian/modprobe.d/blacklist-framebuffer.conf?h=ubuntu/disco
+- name: blacklist > {{ blacklist_path }}
+  ansible.builtin.lineinfile:
+    path: '{{ blacklist_path }}'
+    regexp: '^blacklist {{ item }}'
+    line: 'blacklist {{ item }}'
+    state: present
+  with_items:
+    - pcspkr
+
+- name: bluetooth
+  ansible.builtin.import_tasks: bluetooth.yml
+  when: remove_bluetooth | bool
