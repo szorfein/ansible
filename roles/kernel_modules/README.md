@@ -1,7 +1,7 @@
 kernel_modules
 =========
 
-Reducing range of the attack surface by disabling kernel modules on Linux.
+Reducing range of attack surface by disabling kernel modules and old network protocol on Linux.
 
 Requirements
 ------------
@@ -17,10 +17,10 @@ If you want to change the file destination:
 blacklist_path: /etc/modprobe.d/30_security-misc.conf
 ```
 
-If you need/want to keep bluetooth on your system (default true):
+If you need/want to keep bluetooth on your system (default false):
 
 ```yml
-remove_bluetooth: false
+remove_bluetooth: true
 ```
 
 Dependencies

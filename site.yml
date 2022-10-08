@@ -14,4 +14,4 @@
 - hosts: test
   become: true
   roles:
-    - kernel_modules
+    - { role: kernel_modules, remove_bluetooth: true }

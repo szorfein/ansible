@@ -3,4 +3,4 @@
 blacklist_path: /etc/modprobe.d/30_security-misc.conf
 
 # disable or keep bluetooth
-remove_bluetooth: true
+remove_bluetooth: false

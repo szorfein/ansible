@@ -8,7 +8,7 @@
     - btusb
     - bluetooth
 
-- name: remove Bluetooth
+- name: Remove Bluetooth
   ansible.builtin.lineinfile:
     path: '{{ blacklist_path }}'
     regexp: '^install {{ item }}'
