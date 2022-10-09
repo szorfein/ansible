@@ -137,7 +137,7 @@ main() {
       "$AUTH" xbps-install -S
       INSTALL="xbps-install"
 
-      install_deps "$AUTH ssh" \
+      install_deps "$AUTH openssh" \
                    "ansible sshpass"
 
       if "$SERVER" ; then service_for_void ; fi

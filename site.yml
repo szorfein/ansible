@@ -15,3 +15,8 @@
   become: true
   roles:
     - secure_time_sync
+
+- hosts: test
+  become: true
+  roles:
+    - secure_time_sync

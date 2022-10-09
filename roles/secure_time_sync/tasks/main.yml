@@ -9,10 +9,16 @@
 
 - name: Dependencies
   ansible.builtin.package:
-    name:
-      - curl
-      - tor
+    name: curl
     state: present
+
+- name: Add Tor
+  ansible.builtin.package:
+    name: tor
+    state: present
+  notify:
+    - Enable Tor
+  when: use_tor | bool
 
 - name: Adding systemd service
   ansible.builtin.template:
@@ -26,6 +32,18 @@
     - Enable Sts
   when: ansible_service_mgr == 'systemd'
 
+- name: Adding runit service
+  ansible.builtin.copy:
+    src: secure-time-sync
+    dest: /etc/sv/
+    directory_mode: yes
+    owner: root
+    group: root
+    mode: '0755'
+  notify:
+    - Enable Sts
+  when: ansible_service_mgr == 'runit'
+
 - name: Config Tor
   ansible.builtin.lineinfile:
     path: /etc/tor/torrc
@@ -35,8 +53,9 @@
     validate: 'tor --verify-config -f %s'
   notify:
     - Restart Tor
+  when: use_tor | bool
 
-- name: Service with Tor
+- name: Enable service with Tor
   ansible.builtin.template:
     src: systemd-with-tor.service.j2
     dest: /usr/lib/systemd/system/secure-time-sync-with-tor.service
@@ -45,4 +64,34 @@
     mode: '0644'
   notify:
     - Enable Sts with Tor
-  when: ansible_service_mgr == 'systemd'
+  when: ansible_service_mgr == 'systemd' and use_tor | bool
+
+- name: Disable service with Tor
+  ansible.builtin.service:
+    name: secure-time-sync-with-tor
+    state: stopped
+    enabled: false
+  when: ansible_service_mgr == 'systemd' and not use_tor | bool
+
+- name: Cronie
+  ansible.builtin.package:
+    name: cronie
+    state: present
+  notify:
+    - Enable Cronie
+  when: ansible_service_mgr == 'runit'
+
+- name: Enable cron job
+  ansible.builtin.cron:
+    name: 'Synchronise time with Tor.'
+    minute: '5'
+    job: '/usr/local/bin/secure-time-sync --use-tor'
+  when: ansible_service_mgr == 'runit' and use_tor | bool
+
+- name: Disable cron job
+  ansible.builtin.cron:
+    name: 'Synchronise time with Tor.'
+    job: '/usr/local/bin/secure-time-sync --use-tor'
+    state: absent
+  when: ansible_service_mgr == 'runit' and not use_tor | bool
+

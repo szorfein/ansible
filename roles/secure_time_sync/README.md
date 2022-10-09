@@ -13,7 +13,11 @@ None.
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+secure-time-sync use https by default, if `use_tor` is true, it use `.onion` address instead.
+
+```yml
+use_tor: true
+```
 
 Dependencies
 ------------
@@ -25,7 +29,7 @@ Example Playbook
 
     - hosts: laptops
       roles:
-         - szorfein.secure_time_sync
+        - { role: szorfein.secure_time_sync, use_tor: true }
 
 License
 -------
