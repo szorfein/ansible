@@ -1,0 +1,6 @@
+---
+kernel_hardening_path: /etc/default/grub
+grub_quiet_path: /etc/default/grub
+
+intel_microcode_package: linux-firmware-intel
+amd_microcode_package: linux-firmware-amd

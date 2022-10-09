@@ -5,6 +5,7 @@
     regexp: '^GRUB_CMDLINE*slab_nomerge"$'
     line: 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX slab_nomerge"'
     state: present
+    create: true
   notify:
     - Reload grub-mkconfig
   when: ansible_cmdline.slab_nomerge is not defined or
@@ -92,9 +93,10 @@
 - name: loglevel=0 quiet
   ansible.builtin.lineinfile:
     path: '{{ grub_quiet_path }}'
-    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"$'
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
     line: 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=0 quiet"'
     state: present
+    create: true
   notify:
     - Reload grub-mkconfig
   when: ansible_cmdline.loglevel is not defined or

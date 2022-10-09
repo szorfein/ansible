@@ -29,16 +29,15 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
-  - name: ArchLinux
-    versions:
-      - all
-  #   - 25
-  # - name: SomePlatform
-  #   versions:
-  #   - all
-  #   - 1.0
-  #   - 7
-  #   - 99.99
+    - name: ArchLinux
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - 11.5.0
+    - name: Void Linux
+      versions:
+        - all
 
   galaxy_tags: []
     # List tags for your role here, one per line. A tag is a keyword that describes
