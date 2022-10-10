@@ -3,11 +3,11 @@
 ## Install
 `install.sh` will check dependencies for Ansible and start services.
 
-On a server:
+On a server, it install python3 if need, openssh and start the daemon:
 
     $ ./install.sh --server --password
 
-For you:
+For you, it install ansible, sshpass:
 
     $ ./install.sh --client
 
@@ -15,34 +15,7 @@ Test the connection:
 
     $ ansible localhost -i hosts-start --ask-pass -m ping
 
-If you use a different ssh port and/or different user.
-
-    $ ansible localhost -i hosts-start --ssh-common-args "-p 22220" --ask-pass -u ubuntu -m ping
-
-If the last command return `pong`, the next add password-less for Ansible.
-
-    $ ansible-playbook -i hosts-start -e user_name=ansible -e password="$(pass ansible/password)" -e authorized_key=~/.ssh/ansible.pub -Kk playbooks/ansible-account.yml
-
-If you use `pass`, you can generate secrets like this:
-
-    $ pass generate --no-symbols ansible/password 80
-
-### Configure ssh_config
-After the `install.sh`
-
-    $ vim ~/.ssh/config
-    Host <hostname>:22
-      IdentityFile ~/.ssh/ansible.pub
-
-All Ansible operations after it require `-b, --become` and `--user ansible`.
-
-### Ansible.cfg
-vim ansible.cfg
-
-```cfg
-[defaults]
-remote_user=ansible
-```
+Look [docs/setup](https://github.com/szorfein/ansible/tree/main/docs/setup.md) if need help to setup the thing.
 
 #### Inventory
 

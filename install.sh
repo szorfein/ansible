@@ -116,8 +116,8 @@ msg_info() { printf "${blue}>>${white} $1...${end}" ; }
 install_deps() {
   msg_info "Checking dependencies"
   printf "\n"
-  [ "$SERVER" ] && "$AUTH" $INSTALL $1
-  [ "$CLIENT" ] && "$AUTH" $INSTALL $2
+  if "$SERVER" ; then "$AUTH" $INSTALL $1 ; fi
+  if "$CLIENT" ; then "$AUTH" $INSTALL $2 ; fi
 }
 
 server_setup() {
@@ -137,7 +137,7 @@ main() {
       "$AUTH" xbps-install -S
       INSTALL="xbps-install"
 
-      install_deps "$AUTH ssh" \
+      install_deps "$AUTH openssh python3" \
                    "ansible sshpass"
 
       if "$SERVER" ; then service_for_void ; fi
