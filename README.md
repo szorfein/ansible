@@ -1,23 +1,19 @@
 # ansible
 
-## Install
-`install.sh` will check dependencies for Ansible and start services.
+A collection of roles for manage my systems, make differents profile:
 
-On a server, it install python3 if need, openssh and start the daemon:
++ [hardened] build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
++ [privacy] anonymize the computer.
 
-    $ ./install.sh --server --password
+Maybe futur profile:
++ [dots] Coupled with chezmoi.
++ [vpn]
 
-For you, it install ansible, sshpass:
-
-    $ ./install.sh --client
-
-Test the connection:
-
-    $ ansible localhost -i hosts-start --ask-pass -m ping
+## Setup
 
 Look [docs/setup](https://github.com/szorfein/ansible/tree/main/docs/setup.md) if need help to setup the thing.
 
-#### Inventory
+## Inventory
 
     $ cp hosts_example hosts
 
