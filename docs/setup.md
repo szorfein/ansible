@@ -6,17 +6,21 @@ Install dependencies on the server, it install python3, openssh and start the da
 
 ## Connection on your server
 
-1. Install dependencies on your system (ansible, sshpass).  
+1. Install dependencies on your system (ansible, sshpass).
 
-    ./install.sh --client
+```
+./install.sh --client
+```
 
-2. Connect using ssh on your system.  
+2. Connect using ssh on your system.
 
-    ssh -p 22 username@127.0.0.1
-    This key is not known by any other names
-    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+```
+ssh -p 22 username@127.0.0.1
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+```
 
-This command add the host fingerprint to `~/.ssh/known_hosts` if you validate.  
+This command add the host fingerprint to `~/.ssh/known_hosts` if you validate.
 
 ```
 [127.0.0.1]:22 ssh-ed25519 AAAAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -63,19 +67,25 @@ Return
 
 ## Create a super user on the server (named ansible) with a pubkey authentication.
 
-1. Create a keypair with ssh:  
+1. Create a keypair with ssh:
 
-    ./install.sh --client
+```
+./install.sh --client
+```
 
-Or manually  
+Or manually
 
     ssh-keygen -t ed25519 -o -a 100 -f "$HOME"/.ssh/ansible
 
-2. Execute the `playbook/ansible-account.yml`.  
+2. Execute the `playbook/ansible-account.yml`.
 
-    ansible-playbook -i hosts-start -u username --ssh-common-args "-p 22" -e user_name=ansible -e password="$(pass ansible/password)" -e authorized_key=~/.ssh/ansible.pub -Kk playbooks/ansible-account.yml
+```
+ansible-playbook -i hosts-start -u username --ssh-common-args "-p 22" \
+  -e user_name=ansible -e password="$(pass ansible/password)" -e authorized_key=~/.ssh/ansible.pub \
+  -Kk playbooks/ansible-account.yml
+```
 
-Replace `-e password="AnyComplexPasswordPossible"` if you don't use `pass` or create one:  
+Replace `-e password="AnyComplexPasswordPossible"` if you don't use `pass` or create one:
 
     pass generate --no-symbols ansible/password 80
 
@@ -121,6 +131,6 @@ voidlinux
 
 ## Finish
 
-Execute the final playbook.  
+Execute the final playbook.
 
     ansible-playbook -i hosts site.yml
