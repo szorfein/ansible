@@ -1,6 +1,5 @@
 ---
-# defaults file for kernel_modules
-blacklist_path: /etc/modprobe.d/30_security-misc.conf
-
 # disable or keep bluetooth
 remove_bluetooth: false
+
+blacklist_cdrom: true

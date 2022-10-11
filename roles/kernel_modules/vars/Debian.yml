@@ -1,5 +1,6 @@
 ---
-# vars file for kernel_modules
 config_path: /etc/modprobe.d/30_config.conf
 uninstall_path: /etc/modprobe.d/31_uninstall.conf
 blacklist_path: /etc/modprobe.d/32_blacklist.conf
+# https://wiki.debian.org/KernelModuleBlacklisting
+cmd_recompile_initrd: depmod -ae && update-initramfs -u

@@ -1,5 +1,19 @@
 ---
-# tasks file for kernel_modules
+- name: Load OS-vars for {{ ansible_os_family }}
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: debug
+  ansible.builtin.debug:
+    msg:
+      - "cmd: '{{ cmd_recompile_initrd }}'"
+
 - name: unload
   community.general.modprobe:
     name: '{{ item }}'
@@ -16,73 +30,36 @@
     - mei-me
     - mei
 
-- name: uninstall > {{ blacklist_path }}
-  ansible.builtin.lineinfile:
-    path: '{{ blacklist_path }}'
-    regexp: '^install {{ item }}'
-    line: 'install {{ item }} /bin/false'
-    state: present
-    create: yes
-    mode: '0644'
-  with_items:
-    - firewire-core
-    - firewire_core
-    - firewire-ohci
-    - firewire_ohci
-    - firewire_sbp2
-    - firewire-sbp2
-    - sbp2
-    - msr
-    - dccp
-    - sctp
-    - rds
-    - tipc
-    - n-hdlc
-    - ax25
-    - netrom
-    - rose
-    - af_802154
-    - appletalk
-    - can
-    - atm
-    - cramfs
-    - freevxfs
-    - jffs2
-    - hfs
-    - hfsplus
-    - udf
-    - cifs
-    - nfs
-    - nfsv3
-    - nfsv4
-    - gfs2
-    - vivid
-    - mei
-    - mei-me
-
-# https://git.launchpad.net/ubuntu/+source/kmod/tree/debian/modprobe.d/blacklist.conf?h=ubuntu/disco
-# https://git.launchpad.net/ubuntu/+source/kmod/tree/debian/modprobe.d/blacklist-framebuffer.conf?h=ubuntu/disco
-- name: blacklist > {{ blacklist_path }}
-  ansible.builtin.lineinfile:
-    path: '{{ blacklist_path }}'
-    regexp: '^blacklist {{ item }}'
-    line: 'blacklist {{ item }}'
-    state: present
-  with_items:
-    - snd_intel8x0m
-    - snd_aw2
-    - pcspkr
-
 - name: bluetooth
   ansible.builtin.import_tasks: bluetooth.yml
   when: remove_bluetooth | bool
 
-- name: configure > {{ blacklist_path }}
-  ansible.builtin.lineinfile:
-    path: '{{ blacklist_path }}'
-    regexp: '^options {{ item.name }}'
-    line: 'options {{ item.name }} {{ item.option }}'
-    state: present
-  with_items:
-    - name: nf_conntrack
-      option: nf_conntrack_helper=0
+- name: configure > {{ config_path }}
+  ansible.builtin.copy:
+    src: config.conf
+    dest: '{{ config_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd
+
+- name: uninstall > {{ uninstall_path }}
+  ansible.builtin.template:
+    src: uninstall.j2
+    dest: '{{ uninstall_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd
+
+- name: blacklist > {{ blacklist_path }}
+  ansible.builtin.template:
+    src: blacklist.j2
+    dest: '{{ blacklist_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd
