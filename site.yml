@@ -4,6 +4,7 @@
   roles:
     - hardened
     - sysctl
+    - cmdline
 
 - hosts: privacy
   gather_facts: false
@@ -14,4 +15,3 @@
 - hosts: test
   become: true
   roles:
-    - cmdline
