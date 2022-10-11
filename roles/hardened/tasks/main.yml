@@ -7,3 +7,6 @@
 
 - name: Hidepid
   import_tasks: hidepid.yml
+
+- name: Coredump
+  import_tasks: coredump.yml

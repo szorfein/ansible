@@ -17,3 +17,4 @@
 - hosts: test
   become: true
   roles:
+    - hardened
