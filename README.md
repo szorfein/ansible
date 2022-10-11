@@ -1,50 +1,19 @@
 # ansible
 
-## Install
-`install.sh` will check dependencies for Ansible and start services.
+A collection of Ansible roles to manage my computers with several profles:
 
-On a server:
++ [hardened] build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
++ [privacy] anonymize the computer.
 
-    $ ./install.sh --server --password
+Maybe futur profile:
++ [dots] Coupled with chezmoi.
++ [vpn]
 
-For you:
+## Setup
 
-    $ ./install.sh --client
+Look [docs/setup](https://github.com/szorfein/ansible/blob/install/docs/setup.md) if need help to setup the thing.
 
-Test the connection:
-
-    $ ansible localhost -i hosts-start --ask-pass -m ping
-
-If you use a different ssh port and/or different user.
-
-    $ ansible localhost -i hosts-start --ssh-common-args "-p 22220" --ask-pass -u ubuntu -m ping
-
-If the last command return `pong`, the next add password-less for Ansible.
-
-    $ ansible-playbook -i hosts-start -e user_name=ansible -e password="$(pass ansible/password)" -e authorized_key=~/.ssh/ansible.pub -Kk playbooks/ansible-account.yml
-
-If you use `pass`, you can generate secrets like this:
-
-    $ pass generate --no-symbols ansible/password 80
-
-### Configure ssh_config
-After the `install.sh`
-
-    $ vim ~/.ssh/config
-    Host <hostname>:22
-      IdentityFile ~/.ssh/ansible.pub
-
-All Ansible operations after it require `-b, --become` and `--user ansible`.
-
-### Ansible.cfg
-vim ansible.cfg
-
-```cfg
-[defaults]
-remote_user=ansible
-```
-
-#### Inventory
+## Inventory
 
     $ cp hosts_example hosts
 
