@@ -1,6 +1,6 @@
 # ansible
 
-A collection of roles for manage my systems, make differents profile:
+A collection of Ansible roles to manage my computers with several profles:
 
 + [hardened] build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
 + [privacy] anonymize the computer.
@@ -11,7 +11,7 @@ Maybe futur profile:
 
 ## Setup
 
-Look [docs/setup](https://github.com/szorfein/ansible/tree/main/docs/setup.md) if need help to setup the thing.
+Look [docs/setup](https://github.com/szorfein/ansible/blob/install/docs/setup.md) if need help to setup the thing.
 
 ## Inventory
 
