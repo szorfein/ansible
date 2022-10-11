@@ -1,0 +1,65 @@
+---
+- name: Load OS-vars for {{ ansible_os_family }}
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: debug
+  ansible.builtin.debug:
+    msg:
+      - "cmd: '{{ cmd_recompile_initrd }}'"
+
+- name: unload
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - dccp
+    - sctp
+    - rds
+    - tipc
+    - pcspkr
+    - mei_pxp
+    - mei_hdcp
+    - mei_txe
+    - mei-me
+    - mei
+
+- name: bluetooth
+  ansible.builtin.import_tasks: bluetooth.yml
+  when: remove_bluetooth | bool
+
+- name: configure > {{ config_path }}
+  ansible.builtin.copy:
+    src: config.conf
+    dest: '{{ config_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd
+
+- name: uninstall > {{ uninstall_path }}
+  ansible.builtin.template:
+    src: uninstall.j2
+    dest: '{{ uninstall_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd
+
+- name: blacklist > {{ blacklist_path }}
+  ansible.builtin.template:
+    src: blacklist.j2
+    dest: '{{ blacklist_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Recompile initrd

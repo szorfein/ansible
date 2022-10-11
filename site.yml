@@ -3,6 +3,7 @@
   become: true
   roles:
     - hardened
+    - { role: kernel_modules, remove_bluetooth: true }
     - sysctl
     - cmdline
 
