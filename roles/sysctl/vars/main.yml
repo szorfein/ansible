@@ -1,5 +1,5 @@
 ---
 # vars file for sysctl
-kernel_conf: '/etc/sysctl.conf'
-network_conf: '/etc/sysctl.conf'
-userspace_conf: '/etc/sysctl.conf'
+kernel_conf: '/etc/sysctl.d/kernel.conf'
+network_conf: '/etc/sysctl.d/network.conf'
+userspace_conf: '/etc/sysctl.d/userspace.conf'

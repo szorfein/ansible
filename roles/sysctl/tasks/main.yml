@@ -1,14 +1,10 @@
 ---
 # tasks file for sysctl
-- name: Load OS-vars for {{ ansible_os_family }}
-  include_vars: "{{ lookup('first_found', params) }}"
-  vars:
-    params:
-      files:
-         - '{{ansible_os_family}}.yml'
-         - main.yml
-      paths:
-        - 'vars'
+- name: Ensure /etc/sysctl.d directory exists.
+  file:
+    path: /etc/sysctl.d
+    state: directory
+    mode: 0755
 
 - name: Enforcing kernel rules > {{ kernel_conf }}
   ansible.posix.sysctl:
@@ -22,7 +18,13 @@
     - { name: 'kernel.unprivileged_bpf_disabled', value: '1' }
     - { name: 'kernel.kexec_load_disabled', value: '1' }
     - { name: 'kernel.unprivileged_userns_clone', value: '0' }
+    - { name: 'kernel.perf_event_paranoid', value: '3' }
     - { name: 'kernel.kexec_load_disabled', value: '1' }
+    - { name: 'dev.tty.ldisc_autoload', value: '0' }
+    - { name: 'kernel.core_uses_pid', value: '1' }
+    - { name: 'kernel.modules_disabled', value: '1' }
+    - { name: 'kernel.sysrq', value: '0' }
+  ignore_errors: true
   when: enforce_kernel_rules | bool
 
 - name: Enforcing network rules > {{ network_conf }}
