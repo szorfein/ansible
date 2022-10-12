@@ -1,0 +1,3 @@
+---
+entropy_pkgname: jitterentropy-rngd
+service_name: jitterentropy

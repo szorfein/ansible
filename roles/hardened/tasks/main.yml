@@ -1,4 +1,14 @@
 ---
+- name: Load OS-specific vars.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
 - name: Adding more entropy
   import_tasks: entropy.yml
 
@@ -10,3 +20,9 @@
 
 - name: Coredump
   import_tasks: coredump.yml
+
+- name: umask to 027
+  ansible.builtin.lineinfile:
+    path: /etc/profile
+    regexp: '^umask'
+    line: 'umask 0027'

@@ -22,7 +22,7 @@
     - { name: 'kernel.kexec_load_disabled', value: '1' }
     - { name: 'dev.tty.ldisc_autoload', value: '0' }
     - { name: 'kernel.core_uses_pid', value: '1' }
-    - { name: 'kernel.modules_disabled', value: '1' }
+    - { name: 'kernel.modules_disabled', value: '0' } # Should be 1
     - { name: 'kernel.sysrq', value: '0' }
   ignore_errors: true
   when: enforce_kernel_rules | bool
@@ -59,6 +59,7 @@
     - { name: 'net.core.bpf_jit_harden', value: '2' }
     - { name: 'net.ipv4.conf.all.log_martians', value: '1' }
     - { name: 'net.ipv4.conf.default.log_martians', value: '1' }
+    - { name: 'net.ipv4.tcp_timestamps', value: '0' }
   when: enforce_network_rules | bool
 
 - name: Enforcing userspace rules > {{ userspace_conf }}

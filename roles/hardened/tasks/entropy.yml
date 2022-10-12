@@ -1,12 +1,8 @@
 ---
-- name: Install {{ entropy_pkg }}
+- name: Install {{ entropy_pkgname }}
   package:
-    name: "{{ entropy_pkg }}"
+    name: "{{ entropy_pkgname }}"
     state: present
-
-- name: Running service {{ entropy_pkg }}
-  service:
-    name: "{{ entropy_pkg }}"
-    state: started
-    enabled: yes
-  when: { ansible_os_family != "Gentoo" }
+  notify:
+    - Start Entropy Service
+    - Load Entropy Module
