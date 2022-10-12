@@ -1,5 +1,14 @@
 ---
-# tasks file for secure_shell
+- name: Load OS-vars for {{ ansible_os_family }}
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
 - name: Creating group {{ ssh_group_name }}
   ansible.builtin.group:
     name: "{{ ssh_group_name }}"
@@ -26,6 +35,7 @@
     state: present
     validate: 'sshd -t -f %s'
     mode: '0600'
+    create: true
   with_items:
     - regexp: "^PasswordAuthentication"
       line: "PasswordAuthentication no"
