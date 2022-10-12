@@ -11,7 +11,7 @@ Maybe futur profile:
 
 ## Setup
 
-Look [docs/setup](https://github.com/szorfein/ansible/blob/install/docs/setup.md) if need help to setup the thing.
+Look [docs/setup](https://github.com/szorfein/ansible/blob/develop/docs/setup.md) if need help to setup the thing.
 
 ## Inventory
 

@@ -1,8 +1,0 @@
----
-- name: Install {{ entropy_pkgname }}
-  package:
-    name: "{{ entropy_pkgname }}"
-    state: present
-  notify:
-    - Start Entropy Service
-    - Load Entropy Module

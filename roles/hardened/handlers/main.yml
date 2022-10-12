@@ -6,8 +6,12 @@
     enabled: true
   when: service_name is defined
 
-- name: Load Entropy Module
+- name: Load module jitterentropy
   ansible.builtin.template:
     src: entropy_mod.j2
     dest: /usr/lib/modules-load.d/jitterentropy.conf
-  when: entropy_module is defined
+    when: entropy_module is defined
+
+- name: Recompile initrd
+  ansible.builtin.shell: '{{ cmd_recompile_initrd }}'
+  when: cmd_recompile_initrd is defined

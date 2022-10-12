@@ -9,8 +9,14 @@
       paths:
         - 'vars'
 
-- name: Adding more entropy
-  import_tasks: entropy.yml
+- name: Entropy {{ entropy_pkgname }}
+  package:
+    name: "{{ entropy_pkgname }}"
+    state: present
+    notify:
+      - Start Entropy Service
+      - Load module jitterentropy
+      - Recompile initrd
 
 - name: Fixing permissions
   import_tasks: permission.yml
