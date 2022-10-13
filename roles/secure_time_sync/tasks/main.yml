@@ -5,7 +5,7 @@
     dest: /usr/local/bin/secure-time-sync
     url: https://raw.githubusercontent.com/szorfein/secure-time-sync/main/secure-time-sync.sh
     checksum: sha256:9dde9b9cba77930d66d1a82651c377b5b7ea2bbc40f02e3490e575bac3dc5a96
-    mode: '0755'
+    mode: 0755
 
 - name: Dependencies
   ansible.builtin.package:
@@ -17,7 +17,7 @@
     name: tor
     state: present
   notify:
-    - Enable Tor
+    - Start Tor
   when: use_tor | bool
 
 - name: Adding systemd service
@@ -28,7 +28,7 @@
     group: root
     mode: '0644'
   notify:
-    - Disable NTP services
+    - Reload systemd
     - Enable Sts
   when: ansible_service_mgr == 'systemd'
 
@@ -63,15 +63,9 @@
     group: root
     mode: '0644'
   notify:
+    - Reload systemd
     - Enable Sts with Tor
   when: ansible_service_mgr == 'systemd' and use_tor | bool
-
-- name: Disable service with Tor
-  ansible.builtin.service:
-    name: secure-time-sync-with-tor
-    state: stopped
-    enabled: false
-  when: ansible_service_mgr == 'systemd' and not use_tor | bool
 
 - name: Cronie
   ansible.builtin.package:
@@ -79,7 +73,7 @@
     state: present
   notify:
     - Enable Cronie
-  when: ansible_service_mgr == 'runit'
+  when: ansible_service_mgr == 'runit' and use_tor | bool
 
 - name: Enable cron job
   ansible.builtin.cron:
@@ -95,3 +89,12 @@
     state: absent
   when: ansible_service_mgr == 'runit' and not use_tor | bool
 
+- name: Disable systemd NTP protocol
+  ansible.builtin.service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  with_items:
+    - systemd-timesyncd
+  ignore_errors: true
+  when: ansible_service_mgr == 'systemd'

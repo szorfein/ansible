@@ -1,17 +1,32 @@
 [Unit]
 Description=Network Time Synchronization
 ConditionCapability=CAP_SYS_TIME
+ConditionVirtualization=!container
 Conflicts=shutdown.target
 DefaultDependencies=no
-After=network-online.target nss-lookup.target
+After=network.target
 Wants=network-online.target time-set.target
 
 [Service]
-Type=oneshot
 AmbientCapabilities=CAP_SYS_TIME
 CapabilityBoundingSet=CAP_SYS_TIME
-ExecStartPre=sh -c 'while ! getent hosts eff.org; do sleep 1; done'
+#ExecStartPre=sh -c 'while ! getent hosts eff.org; do sleep 1; done'
 ExecStart=!!/usr/local/bin/secure-time-sync
+{% if use_tor %}
+Type=oneshot
+{% else %}
+Type=notify
+Restart=always
+RestartSec=10
+WatchdogSec=3min
+{% endif %}
+LockPersonality=true
+MemoryDenyWriteExecute=true
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+#PrivateUsers=true
+ProcSubset=pid
 ProtectProc=invisible
 ProtectControlGroups=yes
 ProtectHome=yes
@@ -20,6 +35,13 @@ ProtectKernelLogs=yes
 ProtectKernelModules=yes
 ProtectKernelTunables=yes
 ProtectSystem=strict
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+SystemCallArchitectures=native
+UMask=0077
+#IPAddressDeny=any
 
 [Install]
-WantedBy=network-online.target
+WantedBy=multi-user.target
