@@ -89,6 +89,10 @@
     state: absent
   when: ansible_service_mgr == 'runit' and not use_tor | bool
 
+- name: Apparmor
+  import_tasks: apparmor.yml
+  when: ansible_apparmor.status == 'enabled'
+
 - name: Disable systemd NTP protocol
   ansible.builtin.service:
     name: "{{ item }}"
