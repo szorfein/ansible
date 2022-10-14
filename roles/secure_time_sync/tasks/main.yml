@@ -12,14 +12,6 @@
     name: curl
     state: present
 
-- name: Add Tor
-  ansible.builtin.package:
-    name: tor
-    state: present
-  notify:
-    - Start Tor
-  when: use_tor | bool
-
 - name: Adding systemd service
   ansible.builtin.template:
     src: systemd.service.j2
@@ -44,53 +36,10 @@
     - Enable Sts
   when: ansible_service_mgr == 'runit'
 
-- name: Config Tor
-  ansible.builtin.lineinfile:
-    path: /etc/tor/torrc
-    regexp: '^SOCKSPort 9050'
-    line: 'SOCKSPort 9050'
-    state: present
-    validate: 'tor --verify-config -f %s'
-  notify:
-    - Restart Tor
+- include_tasks: tor.yml
   when: use_tor | bool
 
-- name: Enable service with Tor
-  ansible.builtin.template:
-    src: systemd-with-tor.service.j2
-    dest: /usr/lib/systemd/system/secure-time-sync-with-tor.service
-    owner: root
-    group: root
-    mode: '0644'
-  notify:
-    - Reload systemd
-    - Enable Sts with Tor
-  when: ansible_service_mgr == 'systemd' and use_tor | bool
-
-- name: Cronie
-  ansible.builtin.package:
-    name: cronie
-    state: present
-  notify:
-    - Enable Cronie
-  when: ansible_service_mgr == 'runit' and use_tor | bool
-
-- name: Enable cron job
-  ansible.builtin.cron:
-    name: 'Synchronise time with Tor.'
-    minute: '5'
-    job: '/usr/local/bin/secure-time-sync --use-tor'
-  when: ansible_service_mgr == 'runit' and use_tor | bool
-
-- name: Disable cron job
-  ansible.builtin.cron:
-    name: 'Synchronise time with Tor.'
-    job: '/usr/local/bin/secure-time-sync --use-tor'
-    state: absent
-  when: ansible_service_mgr == 'runit' and not use_tor | bool
-
-- name: Apparmor
-  import_tasks: apparmor.yml
+- include_tasks: apparmor.yml
   when: ansible_apparmor.status == 'enabled'
 
 - name: Disable systemd NTP protocol
