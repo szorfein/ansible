@@ -89,7 +89,6 @@ configure_sudo() {
   "$AUTH" chmod 600 /etc/sudoers.d/"$USER"
 }
 
-
 dep() {
   if ! hash "$2" 2>/dev/null ; then
     echo "Installing $1."

@@ -13,6 +13,7 @@
   become: true
   roles:
     - privacy
+    - secure_time_sync
 
 - hosts: test
   become: true
