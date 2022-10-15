@@ -11,12 +11,12 @@
 
 - name: Entropy {{ entropy_pkgname }}
   package:
-    name: "{{ entropy_pkgname }}"
+    name: '{{ entropy_pkgname }}'
     state: present
-    notify:
-      - Start Entropy Service
-      - Load module jitterentropy
-      - Recompile initrd
+  notify:
+    - Start Entropy Service
+    - Load module jitterentropy
+    - Recompile initrd
 
 - name: Fixing permissions
   import_tasks: permission.yml

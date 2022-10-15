@@ -20,3 +20,7 @@ Look [docs/setup](https://github.com/szorfein/ansible/blob/develop/docs/setup.md
 ## Start
 
     $ ansible-playbook -i hosts site.yml
+
+### Reporting Issues
+
+If you're experiencing a problem that you feel is a bug or have ideas for improving, i encourage you to open an issue and share your feedback.
