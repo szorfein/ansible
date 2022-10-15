@@ -1,7 +1,22 @@
 ---
 # tasks file for packages
+- name: Load OS-vars.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
 - include_tasks: debian.yml
   when: ansible_os_family == 'Debian'
 
 - include_tasks: arch.yml
   when: ansible_os_family == 'Archlinux'
+
+- name: Add a malware scanner
+  ansible.builtin.package:
+    name: '{{ malware_package_name }}'
+    state: present

@@ -1,2 +1,3 @@
 ---
 # vars file for packages
+malware_package_name: chkrootkit

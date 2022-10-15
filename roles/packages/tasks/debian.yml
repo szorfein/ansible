@@ -7,6 +7,6 @@
       - needrestart
       - debsecan
       - debsums
-      - fail2ban
-    state: latest
+      #  - fail2ban
+    state: present
     update_cache: true
