@@ -1,0 +1,40 @@
+---
+# tasks file for cmdline
+- name: Load OS-vars for {{ ansible_os_family }}
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: mount /boot
+  ansible.builtin.shell: mount /boot
+  when: mount_boot
+
+- name: setup Debian
+  import_tasks: setup-debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: last Intel microcode
+  ansible.builtin.package:
+    name: '{{ intel_microcode_package }}'
+    state: present
+  when: ansible_processor[1] == 'GenuineIntel'
+
+- name: last Amd microcode
+  ansible.builtin.package:
+    name: '{{ amd_microcode_package }}'
+    state: present
+  when: ansible_processor[1] != 'GenuineIntel'
+
+- ansible.builtin.shell: hash grub-install
+  register: grub_install
+  ignore_errors: true
+
+- name: importing Grub tasks
+  ansible.builtin.import_tasks: grub.yml
+  when: grub_install is succeeded
+  # when: grub_install is failed

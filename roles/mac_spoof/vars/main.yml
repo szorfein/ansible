@@ -1,0 +1,6 @@
+---
+# vars file for mac_spoof
+udev_service_name: systemd-udevd
+iwd_service_name: iwd
+wpa_supplicant_service_name: wpa_supplicant
+udev_rule_path: /etc/udev/rules.d/81-mac-spoof.rules

@@ -1,0 +1,33 @@
+---
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html
+- name: Load OS-specific vars
+  ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ ansible_os_family }}.yml'
+        - main.yml
+      paths:
+        - 'vars'
+
+- name: Installing macchanger
+  ansible.builtin.package:
+    name: macchanger
+    state: present
+
+- include_tasks: wifi.yml
+  when: interface.startswith('wl')
+  loop: '{{ ansible_facts.interfaces }}'
+  loop_control:
+    loop_var: interface # rename loop default name 'item' by 'interface'
+
+- name: udev rules for ethernet cards > {{ udev_rule_path }}
+  ansible.builtin.template:
+    src: udev.rules.j2
+    dest: '{{ udev_rule_path }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart udev
+  when: ansible_system_vendor != 'QEMU'

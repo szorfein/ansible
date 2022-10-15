@@ -1,0 +1,5 @@
+---
+# disable or keep bluetooth
+remove_bluetooth: false
+
+blacklist_cdrom: true

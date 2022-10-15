@@ -1,0 +1,10 @@
+---
+- name: Unload bluetooth
+  community.general.modprobe:
+    name: '{{ item }}'
+    state: absent
+  with_items:
+    - hci_vhci
+    - hci_uart
+    - btusb
+    - bluetooth

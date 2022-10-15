@@ -1,0 +1,5 @@
+---
+# defaults file for sysctl
+enforce_kernel_rules: true
+enforce_network_rules: true
+enforce_userspace_rules: true

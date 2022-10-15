@@ -1,18 +1,26 @@
 # ansible
 
-## Configuration
+A collection of Ansible roles to manage my computers with several profles:
 
-#### Ssh_config
-After the `install.sh`
++ [hardened] build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
++ [privacy] anonymize the computer.
 
-    $ vim ~/.ssh/config
-    Host <hostname>
-      IdentityFile ~/.ssh/ansible_ed25519.key
+Maybe futur profile:
++ [dots] Coupled with chezmoi.
++ [vpn]
 
-#### Inventory
+## Setup
+
+Look [docs/setup](https://github.com/szorfein/ansible/blob/develop/docs/setup.md) if need help to setup the thing.
+
+## Inventory
 
     $ cp hosts_example hosts
 
 ## Start
 
     $ ansible-playbook -i hosts site.yml
+
+### Reporting Issues
+
+If you're experiencing a problem that you feel is a bug or have ideas for improving, i encourage you to open an issue and share your feedback.
