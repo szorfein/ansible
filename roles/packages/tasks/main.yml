@@ -1,0 +1,7 @@
+---
+# tasks file for packages
+- include_tasks: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_tasks: arch.yml
+  when: ansible_os_family == 'Archlinux'

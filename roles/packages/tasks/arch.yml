@@ -1,0 +1,7 @@
+---
+- name: adding pkgs
+  community.general.pacman:
+    name: 
+      - arch-audit
+    state: present
+    update_cache: true

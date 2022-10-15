@@ -1,0 +1,12 @@
+---
+- name: adding pkgs
+  ansible.builtin.apt:
+    pkg:
+      - libpam-tmpdir
+      - apt-listbugs
+      - needrestart
+      - debsecan
+      - debsums
+      - fail2ban
+    state: latest
+    update_cache: true

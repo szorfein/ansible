@@ -18,3 +18,4 @@
 - hosts: test
   become: true
   roles:
+    - packages
