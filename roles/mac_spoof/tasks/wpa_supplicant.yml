@@ -1,0 +1,30 @@
+---
+- name: Installing wpa_supplicant
+  ansible.builtin.package:
+    name: wpa_supplicant
+    state: present
+  notify:
+    - enable wpa_supplicant
+
+- name: wpa_supplicant on {{ interface }}
+  ansible.builtin.lineinfile:
+    path: "/etc/wpa_supplicant/wpa_supplicant-{{ interface }}.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    create: true
+    mode: '0644'
+  with_items:
+    - regexp: '^mac_addr'
+      line: 'mac_addr=1'
+    - regexp: '^preassoc_mac_addr'
+      line: 'preassoc_mac_addr=1'
+    - regexp: '^gas_rand_mac_addr'
+      line: 'gas_rand_mac_addr=1'
+  notify:
+    - restart wpa_supplicant
+
+- name: Remove other wifi client
+  ansible.builtin.package:
+    name: iwd
+    state: absent

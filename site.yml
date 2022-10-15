@@ -9,11 +9,11 @@
     - sysctl
 
 - hosts: privacy
-  gather_facts: false
   become: true
   roles:
     - privacy
     - secure_time_sync
+    - { role: mac_spoof, wifi_client: iwd }
 
 - hosts: test
   become: true
