@@ -1,0 +1,11 @@
+---
+- name: spoof {{ interface }}
+  ansible.builtin.debug:
+    msg:
+      - "Use wifi {{ interface }}"
+
+- include_tasks: wpa_supplicant.yml
+  when: wifi_client is defined and wifi_client == 'wpa_supplicant'
+
+- include_tasks: iwd.yml
+  when: wifi_client is defined and wifi_client == 'iwd'

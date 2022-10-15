@@ -1,4 +1,11 @@
 ---
+- name: Installing wpa_supplicant
+  ansible.builtin.package:
+    name: wpa_supplicant
+    state: present
+  notify:
+    - enable wpa_supplicant
+
 - name: wpa_supplicant on {{ interface }}
   ansible.builtin.lineinfile:
     path: "/etc/wpa_supplicant/wpa_supplicant-{{ interface }}.conf"
@@ -16,3 +23,8 @@
       line: 'gas_rand_mac_addr=1'
   notify:
     - restart wpa_supplicant
+
+- name: Remove other wifi client
+  ansible.builtin.package:
+    name: iwd
+    state: absent

@@ -1,0 +1,22 @@
+---
+- name: Installing iwd
+  ansible.builtin.package:
+    name: iwd
+    state: present
+  notify:
+    - enable iwd
+
+- name: Configuring iwd
+  ansible.builtin.template:
+    src: iwd.conf.j2
+    dest: /etc/iwd/main.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - restart iwd
+
+- name: Remove other wifi client
+  ansible.builtin.package:
+    name: wpa_supplicant
+    state: absent

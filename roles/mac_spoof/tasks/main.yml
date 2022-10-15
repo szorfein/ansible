@@ -1,6 +1,6 @@
 ---
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html
-- name: Load variable file for {{ ansible_os_family }}
+- name: Load OS-specific vars
   ansible.builtin.include_vars: "{{ lookup('ansible.builtin.first_found', params) }}"
   vars:
     params:
@@ -15,60 +15,19 @@
     name: macchanger
     state: present
 
-- name: Installing iwd
-  ansible.builtin.package:
-    name: iwd
-    state: present
-  notify:
-    - enable iwd
-  when: wifi_client is defined and wifi_client == 'iwd'
-
-- name: Configuring iwd
-  ansible.builtin.template:
-    src: iwd.conf.j2
-    dest: /etc/iwd/main.conf
-    owner: root
-    group: root
-    mode: '0644'
-  notify:
-    - restart iwd
-  when: wifi_client is defined and wifi_client == 'iwd'
-
-- name: Installing wpa_supplicant
-  ansible.builtin.package:
-    name: wpa_supplicant
-    state: present
-  notify:
-    - enable wpa_supplicant
-  when: wifi_client is defined and wifi_client == 'wpa_supplicant'
-
-- name: wpa_supplicant
-  include_tasks: wpa_supplicant.yml
-  when: wifi_client == 'wpa_supplicant' and interface.startswith("wl")
+- include_tasks: wifi.yml
+  when: interface.startswith('wl')
   loop: '{{ ansible_facts.interfaces }}'
   loop_control:
     loop_var: interface # rename loop default name 'item' by 'interface'
 
-- ansible.builtin.stat:
-    path: /etc/udev/rules.d
-  register: p
-
-- name: Installing udev rules > {{ udev_file_name }}
+- name: udev rules for ethernet cards > {{ udev_rule_path }}
   ansible.builtin.template:
     src: udev.rules.j2
-    dest: "/etc/udev/rules.d/{{ udev_file_name }}"
+    dest: '{{ udev_rule_path }}'
     owner: root
     group: root
-    mode: '0644'
+    mode: 0644
   notify:
     - restart udev
-  when: p.stat.isdir is defined and p.stat.isdir
-
-- name: Uninstall wifi clients
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: absent
-  with_items:
-    - iwd
-    - wpa_supplicant
-  when: wifi_client is undefined
+  when: ansible_system_vendor != 'QEMU'

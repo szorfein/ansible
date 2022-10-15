@@ -1,3 +1,2 @@
 ---
 # defaults file for mac_spoof
-udev_file_name: 00-mac-spoof.rules

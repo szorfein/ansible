@@ -1,0 +1,5 @@
+---
+udev_service_name: udevd
+iwd_service_name: iwd
+wpa_supplicant_service_name: wpa_supplicant
+udev_rule_path: /lib/udev/rules.d/81-mac-spoof.rules

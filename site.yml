@@ -10,3 +10,7 @@
   roles:
     - privacy
     - { role: mac_spoof, wifi_client: iwd }
+
+- hosts: test
+  become: true
+  roles:
