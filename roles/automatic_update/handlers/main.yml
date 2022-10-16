@@ -1,0 +1,6 @@
+---
+- name: Start paccache
+  ansible.builtin.service:
+    name: paccache@timer
+    state: started
+    enable: yes

@@ -1,0 +1,9 @@
+---
+- name: Install pacman-contrib
+  ansible.builtin.package:
+    name: pacman-contrib 
+    state: present
+  notify:
+    - Start paccache
+
+
