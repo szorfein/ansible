@@ -1,0 +1,7 @@
+---
+- name: Install logger socklog-void
+  ansible.builtin.package:
+    name: socklog-void
+    state: present
+  notify:
+    - Enable Void logger

@@ -16,12 +16,15 @@
 - include_tasks: arch.yml
   when: ansible_os_family == 'Archlinux'
 
+- include_tasks: void.yml
+  when: ansible_os_family == 'Void'
+
 - name: add logrotate
   ansible.builtin.package:
     name: logrotate
     state: present
   notify:
-    - Enable logrotate
+    - Enable systemd logrotate
 
 - name: Add a malware scanner
   ansible.builtin.package:

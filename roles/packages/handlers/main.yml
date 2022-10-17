@@ -1,8 +1,17 @@
 ---
 # handlers file for packages
-- name: Enable logrotate
+- name: Enable systemd logrotate
   ansible.builtin.service:
-    name: logrotate
+    name: logrotate.timer
     state: started
     enabled: true
-  when: ansible_os_familly != 'Void' # void use cron
+  when: ansible_service_mgr == 'systemd' # void use cron
+
+- name: Enable Void logger
+  ansible.builtin.service:
+    name: '{{ item }}'
+    state: started
+    enabled: true
+  with_items:
+    - socklog-unix
+    - nanoklogd
