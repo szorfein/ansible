@@ -1,2 +1,8 @@
 ---
 # handlers file for packages
+- name: Enable logrotate
+  ansible.builtin.service:
+    name: logrotate
+    state: started
+    enabled: true
+  when: ansible_os_familly != 'Void' # void use cron
