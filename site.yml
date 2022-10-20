@@ -1,8 +1,10 @@
 ---
 - hosts: hardened
+  collections:
+    - szorfein.hardening
   become: true
   roles:
-    - { role: secure_shell, allowed_users: [ ansible ] }
+    - { role: ssh, allowed_users: [ ansible ] }
     - hardened
     - { role: kernel_modules, remove_bluetooth: true }
     - cmdline
@@ -17,4 +19,6 @@
 
 - hosts: test
   become: true
+  collections:
+    - szorfein.hardening
   roles:

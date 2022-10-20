@@ -13,6 +13,10 @@ Maybe futur profile:
 
 Look [docs/setup](https://github.com/szorfein/ansible/blob/develop/docs/setup.md) if need help to setup the thing.
 
+## Dependencies
+
+    ansile-galaxy collection install -r requirements.yml
+
 ## Inventory
 
     $ cp hosts_example hosts

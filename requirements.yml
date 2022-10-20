@@ -1,0 +1,5 @@
+---
+collections:
+  - name: https://github.com/szorfein/ansible-collection-hardening.git
+    type: git
+    version: ssh
