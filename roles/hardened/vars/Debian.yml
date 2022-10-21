@@ -1,5 +1,0 @@
----
-entropy_pkgname: jitterentropy-rngd
-service_name: jitterentropy
-entropy_module: jitterentropy_rng
-cmd_recompile_initrd: depmod -ae && update-initramfs -u

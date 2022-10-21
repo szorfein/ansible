@@ -4,8 +4,8 @@
     - szorfein.hardening
   become: true
   roles:
-    - { role: ssh, allowed_users: [ ansible ] }
-    - hardened
+    #- { role: szorfein.hardening.ssh, allowed_users: [ ansible ] }
+    - szorfein.hardening.os
     - { role: kernel_modules, remove_bluetooth: true }
     - cmdline
     - sysctl
@@ -22,3 +22,4 @@
   collections:
     - szorfein.hardening
   roles:
+    - szorfein.hardening.os
