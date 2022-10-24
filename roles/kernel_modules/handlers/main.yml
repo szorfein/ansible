@@ -1,4 +1,0 @@
----
-# handlers file for kernel_modules
-- name: Recompile initrd
-  ansible.builtin.shell: '{{ cmd_recompile_initrd }}'

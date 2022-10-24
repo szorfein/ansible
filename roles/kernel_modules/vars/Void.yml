@@ -1,5 +1,0 @@
----
-config_path: /etc/modprobe.d/30_config.conf
-uninstall_path: /etc/modprobe.d/31_uninstall.conf
-blacklist_path: /etc/modprobe.d/32_blacklist.conf
-cmd_recompile_initrd: xbps-reconfigure -f $(xbps-query -Rs linux*{{ ansible_kernel }} | awk '{print $2}' | head -n1)
