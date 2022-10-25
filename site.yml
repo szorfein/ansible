@@ -6,7 +6,6 @@
   roles:
     #- { role: szorfein.hardening.ssh, allowed_users: [ ansible ] }
     - { role: szorfein.hardening.os, os_modprobe_remove_bluetooth: true }
-    - cmdline
 
 - hosts: privacy
   become: true

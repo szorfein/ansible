@@ -1,6 +1,0 @@
----
-kernel_hardening_path: /etc/default/grub.d/40_kernel_hardening.cfg
-grub_quiet_path: /etc/default/grub.d/41_quiet.cfg
-
-intel_microcode_package: intel-microcode
-amd_microcode_package: amd64-microcode
