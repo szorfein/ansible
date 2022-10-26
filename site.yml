@@ -8,15 +8,17 @@
     - { role: szorfein.hardening.os, os_modprobe_remove_bluetooth: true }
 
 - hosts: privacy
+    - szorfein.privacy
   become: true
   roles:
-    - privacy
     - secure_time_sync
     - { role: mac_spoof, wifi_client: iwd }
+    - { role: szorfein.privacy.os, os_wifi_client: iwd }
 
 - hosts: test
   become: true
   collections:
-    - szorfein.hardening
+    - szorfein.privacy
   roles:
-    - { role: szorfein.hardening.os, os_modprobe_remove_bluetooth: true }
+    - szorfein.privacy.os
+

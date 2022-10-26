@@ -2,4 +2,5 @@
 collections:
   - name: https://github.com/szorfein/ansible-collection-hardening.git
     type: git
-    version: ssh
+  - name: https://github.com/szorfein/ansible-collection-privacy.git
+    type: git

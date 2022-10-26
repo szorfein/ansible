@@ -1,5 +1,0 @@
----
-- name: Changing /etc/hostname
-  copy:
-    dest: /etc/hostname
-    content: "host\n"

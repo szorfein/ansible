@@ -1,11 +1,11 @@
 # ansible
 
-A collection of Ansible roles to manage my computers with several profles:
+Use different Ansible collections to manage my computers with several profles:
 
-+ [hardened] build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
-+ [privacy] anonymize the computer.
++ [hardened](https://github.com/szorfein/ansible-collection-hardening) build ~= 80 hardening index from [lynis](https://cisofy.com/lynis/). A work in progress...
++ [privacy](https://github.com/szorfein/ansible-collection-privacy) anonymize the computer.
 
-Maybe futur profile:
+Maybe futur collection:
 + [dots] Coupled with chezmoi.
 + [vpn]
 
