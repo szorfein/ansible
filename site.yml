@@ -20,5 +20,5 @@
   collections:
     - szorfein.privacy
   roles:
-    - szorfein.privacy.os
+    - { role: szorfein.privacy.os, os_wifi_client: iwd }
 
