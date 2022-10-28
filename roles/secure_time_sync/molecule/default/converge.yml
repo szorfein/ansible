@@ -1,8 +1,0 @@
----
-- name: Converge
-  hosts: all
-  gather_facts: false
-  tasks:
-    - name: "Include szorfein.secure_time_sync"
-      ansible.builtin.include_role:
-        name: "szorfein.secure_time_sync"

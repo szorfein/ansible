@@ -2,7 +2,7 @@
 
 Use different Ansible collections to manage my computers:
 
-+ [hardened](https://github.com/szorfein/ansible-collection-hardening) build ~= 80 hardening index for [lynis](https://cisofy.com/lynis/). A work in progress...
++ [hardening](https://github.com/szorfein/ansible-collection-hardening) build ~80 hardening index for [lynis](https://cisofy.com/lynis/). A work in progress...
 + [privacy](https://github.com/szorfein/ansible-collection-privacy) anonymize the computer.
 
 Maybe futur collection:

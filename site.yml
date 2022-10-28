@@ -4,15 +4,13 @@
     - szorfein.hardening
   become: true
   roles:
-    #- { role: szorfein.hardening.ssh, allowed_users: [ ansible ] }
     - { role: szorfein.hardening.os, os_modprobe_remove_bluetooth: true }
+    #- { role: szorfein.hardening.ssh, allowed_users: [ ansible ] }
 
 - hosts: privacy
     - szorfein.privacy
   become: true
   roles:
-    - secure_time_sync
-    - { role: mac_spoof, wifi_client: iwd }
     - { role: szorfein.privacy.os, os_wifi_client: iwd }
 
 - hosts: test
@@ -20,5 +18,6 @@
   collections:
     - szorfein.privacy
   roles:
-    - { role: szorfein.privacy.os, os_wifi_client: iwd }
+    - { role: szorfein.hardening.os, os_modprobe_remove_bluetooth: true }
+      #- { role: szorfein.privacy.os, os_wifi_client: iwd }
 
